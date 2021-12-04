@@ -15,6 +15,7 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
+import { Navigate } from "react-router-dom";
 // regular expressions
 import { validEmail, validPassword } from "../helpers/Regex";
 
@@ -39,9 +40,10 @@ function Copyright(props) {
 const theme = createTheme();
 
 export const Login = () => {
-  const [emptyData, setEmptyData] = useState(false);
   const [open, setOpen] = useState(false);
   const [msgErr, setMsgErr] = useState("");
+  const [auth, setAuth] = useState({ email: "", password: "" });
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -54,28 +56,30 @@ export const Login = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    // eslint-disable-next-line no-console
-    if (!validEmail.test(data.get("email"))) {
-      setOpen(true);
-      setEmptyData(true);
-      setMsgErr("Correo");
-      return;
-    }
-    if (!validPassword.test(data.get("password"))) {
-      setOpen(true);
-      setEmptyData(true);
-      setMsgErr("Password");
-      return;
-    }
-    console.log({
+    setAuth({
       email: data.get("email"),
       password: data.get("password"),
     });
+    // eslint-disable-next-line no-console
+    if (!validEmail.test(auth.email)) {
+      setOpen(true);
+      setMsgErr("Correo");
+      return;
+    }
+    if (!validPassword.test(auth.password)) {
+      setOpen(true);
+      setMsgErr("Contraseña");
+      return;
+    }
+
+    setIsLoggedIn(true);
   };
 
-  return (
+  return isLoggedIn ? (
+    <Navigate to="/dashboard" />
+  ) : (
     <ThemeProvider theme={theme}>
-      {emptyData ? (
+      {open ? (
         <Snackbar
           open={open}
           autoHideDuration={4000}
