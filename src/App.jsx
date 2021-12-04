@@ -5,6 +5,7 @@ import PageNotFound from "./components/pages/PageNotFound";
 
 import { Provider } from "react-redux";
 import store from "./components/store/store";
+import Register from "./components/pages/Register";
 
 function App() {
   return (
@@ -13,7 +14,9 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Login />} />
+            <Route path="/registro" element={<Register />} />
             <Route path="/dashboard" element={<Dashboard />} />
+
             <Route path="*" element={<PageNotFound />} />
           </Routes>
         </BrowserRouter>
