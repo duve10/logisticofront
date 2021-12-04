@@ -19,6 +19,9 @@ import { Navigate } from "react-router-dom";
 // regular expressions
 import { validEmail, validPassword } from "../helpers/Regex";
 
+import { useDispatch } from "react-redux";
+import { login } from "../features/userSlice";
+
 function Copyright(props) {
   return (
     <Typography
@@ -44,6 +47,8 @@ export const Login = () => {
   const [msgErr, setMsgErr] = useState("");
   const [auth, setAuth] = useState({ email: "", password: "" });
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const dispatch = useDispatch();
 
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -73,6 +78,13 @@ export const Login = () => {
     }
 
     setIsLoggedIn(true);
+    dispatch(
+      login({
+        email: auth.email,
+        password: auth.password,
+        isLoggedIn: true,
+      })
+    );
   };
 
   return isLoggedIn ? (
