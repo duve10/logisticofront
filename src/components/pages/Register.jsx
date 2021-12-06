@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -12,6 +12,8 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { sendRegister } from "../helpers/axiosData";
+import { Navigate } from "react-router-dom";
 
 function Copyright(props) {
   return (
@@ -34,14 +36,22 @@ function Copyright(props) {
 const theme = createTheme();
 
 const Register = () => {
+  const [registro, setRegistro] = useState({});
+  const URL = "http://localhost:8000/api/auth/register";
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     // eslint-disable-next-line no-console
-    console.log({
+    setRegistro({
+      name: data.get("name"),
       email: data.get("email"),
       password: data.get("password"),
+      password_confirmation: data.get("password_confirmation"),
     });
+
+    sendRegister(URL, registro);
+    return;
   };
 
   return (
@@ -69,27 +79,18 @@ const Register = () => {
             sx={{ mt: 3 }}
           >
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12}>
                 <TextField
                   autoComplete="given-name"
-                  name="Nombres"
+                  name="name"
                   required
                   fullWidth
-                  id="nombres"
+                  id="name"
                   label="Nombres"
                   autoFocus
                 />
               </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  required
-                  fullWidth
-                  id="apellidos"
-                  label="Apellidos"
-                  name="apellidos"
-                  autoComplete="family-name"
-                />
-              </Grid>
+
               <Grid item xs={12}>
                 <TextField
                   required
@@ -109,6 +110,17 @@ const Register = () => {
                   type="password"
                   id="password"
                   autoComplete="new-password"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  name="password_confirmation"
+                  label="Confirmar Contraseña"
+                  type="password"
+                  id="password_confirmation"
+                  autoComplete="password confirmed"
                 />
               </Grid>
               <Grid item xs={12}>
